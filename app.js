@@ -14,13 +14,9 @@ mongoose.connect('mongodb://dbUser:'+ process.env.MONGO_ATLAS_PW +'@node-rest-sh
   }
 ).catch(error => handleError(error));
 
-// const connection = mongoose.connection;
-
-// connection.once("open", function() {
-//   console.log("MongoDB database connection established successfully");
-// });
 
 app.use(morgan("dev"));
+app.use('/uploads', express.static('uploads')); // uploads folder available to everyone in order to access images
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
