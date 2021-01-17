@@ -2,9 +2,23 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
 
 const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
+
+mongoose.connect('mongodb://dbUser:'+ process.env.MONGO_ATLAS_PW +'@node-rest-shop-shard-00-00.f25jx.mongodb.net:27017,node-rest-shop-shard-00-01.f25jx.mongodb.net:27017,node-rest-shop-shard-00-02.f25jx.mongodb.net:27017/' + process.env.MONGO_ATLAS_DB_NAME + '?ssl=true&replicaSet=atlas-nblxn4-shard-0&authSource=admin&retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+).catch(error => handleError(error));
+
+// const connection = mongoose.connection;
+
+// connection.once("open", function() {
+//   console.log("MongoDB database connection established successfully");
+// });
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
