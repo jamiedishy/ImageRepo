@@ -38,7 +38,7 @@ router.get('/', (req, res, next) => {
         .then(docs => {
             const response = {
                 count: docs.length,
-                products: docs.map(doc => {
+                products: docs.map((doc, index) => {
                     let newDocProductImage = doc.productImage.replace("\\", "/");
                     // console.log(newDocProductImage);
                     return {
@@ -46,6 +46,7 @@ router.get('/', (req, res, next) => {
                         price: doc.price,
                         productImage: doc.productImage,
                         _id: doc._id,
+                        index: index,
                         request: {
                             type: 'GET',
                             url: 'http://localhost:3000/' + newDocProductImage
@@ -130,6 +131,8 @@ router.get('/:productId', (req, res, next) => {
 router.patch('/:productId', (req, res, next) => {
     const id = req.params.productId;
     const updateOps = {};
+    console.log(req.body)
+    console.log("hi")
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
