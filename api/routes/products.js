@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, './uploads/');
+    destination: function (req, file, cb) {
+        cb(null, './uploads/');
   },
   filename: function(req, file, cb) {
     cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
@@ -39,6 +39,8 @@ router.get('/', (req, res, next) => {
             const response = {
                 count: docs.length,
                 products: docs.map(doc => {
+                    let newDocProductImage = doc.productImage.replace("\\", "/");
+                    // console.log(newDocProductImage);
                     return {
                         name: doc.name,
                         price: doc.price,
@@ -46,7 +48,7 @@ router.get('/', (req, res, next) => {
                         _id: doc._id,
                         request: {
                             type: 'GET',
-                            url: 'http://localhost:3000/products/' + doc._id
+                            url: 'http://localhost:3000/' + newDocProductImage
                         }
                     }
                 })
@@ -64,6 +66,8 @@ router.get('/', (req, res, next) => {
 
 // 1 file only
 router.post('/', upload.single('productImage'), (req, res, next) => {
+    console.log('hi');
+    console.log(req.file.path)
     // console.log(req.file); // available due to upload.single middleware
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
